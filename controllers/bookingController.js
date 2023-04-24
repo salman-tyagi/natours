@@ -69,7 +69,7 @@ export const checkoutSession = (req, res, next) => {
   let event;
   try {
     event = stripe.webhooks.constructEvent(
-      request.body,
+      req.body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET
     );
