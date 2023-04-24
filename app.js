@@ -9,6 +9,7 @@ import xss from 'xss-clean';
 import hpp from 'hpp';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
+import cors from 'cors';
 
 import AppError from './utils/appError.js';
 import globalErrorHandler from './controllers/errorController.js';
@@ -27,6 +28,15 @@ app.set('views', path.join('views'));
 dotenv.config({ path: 'config.env' });
 
 // 1) GLOBAL MIDDLEWARES
+// Implementing CORS
+app.use(cors());
+// Access-Control-Allow-Origin to all *
+// api.natours.com, front-end natours.io
+// app.use(cors({ origin: 'https://www.natours.com' }))
+
+app.options('*', cors());
+// app.options('/api/v1/tours/:id', cors());
+
 // Serving static files
 app.use(express.static(path.join('public')));
 
