@@ -57,7 +57,7 @@ export const getBookingSession = catchAsync(async (req, res, next) => {
 
 const createBookinCheckout = async session => {
   const tour = session.client_reference_id;
-  const user = (await User.findOne({ custId: session.customer })).id;
+  const user = (await User.findOne({ stripeCustomerId: session.customer }))._id;
   const price = session.line_items[0].price_data.unit_amount;
   await Booking.create({ tour, user, price });
 };
