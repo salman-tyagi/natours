@@ -20,7 +20,7 @@ export const getBookingSession = catchAsync(async (req, res, next) => {
     line_items: [
       {
         price_data: {
-          unit_amount: tour.price,
+          unit_amount: tour.price * 100,
           currency: 'usd',
           product_data: {
             name: `${tour.name} Tour`,
@@ -58,11 +58,12 @@ export const getBookingSession = catchAsync(async (req, res, next) => {
 const createBookinCheckout = async session => {
   const tour = session.client_reference_id;
   const user = (await User.findOne({ stripeCustomerId: session.customer }))._id;
-  const price = session.line_items[0].price_data.unit_amount;
+  const price = session.line_items[0].price_data.unit_amount / 100;
   await Booking.create({ tour, user, price });
 };
 
 export const checkoutSession = (req, res, next) => {
+  console.log(req.body);
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const signature = request.headers['stripe-signature'];
 
