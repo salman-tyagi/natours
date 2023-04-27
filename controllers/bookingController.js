@@ -63,6 +63,8 @@ const createBookinCheckout = async session => {
 };
 
 export const checkoutSession = (req, res, next) => {
+  const body = Buffer.from(req.body).toString();
+  console.log(body);
   console.log(req.body);
   console.log(req.headers);
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
