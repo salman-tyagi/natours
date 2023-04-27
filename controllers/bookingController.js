@@ -65,7 +65,7 @@ const createBookinCheckout = async session => {
 export const checkoutSession = (req, res, next) => {
   console.log(req.body);
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-  const signature = request.headers['stripe-signature'];
+  const signature = req.headers['stripe-signature'];
 
   let event;
   try {
