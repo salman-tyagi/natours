@@ -58,25 +58,24 @@ export const getBookingSession = catchAsync(async (req, res, next) => {
 const createBookinCheckout = async session => {
   const tour = session.client_reference_id;
   const user = (await User.findOne({ stripeCustomerId: session.customer }))._id;
-  const price = session.line_items[0].price_data.unit_amount / 100;
+  const price = session.amount_total / 100;
   await Booking.create({ tour, user, price });
 };
 
 export const checkoutSession = (req, res, next) => {
   const body = Buffer.from(req.body).toString();
   console.log(body);
-  console.log(req.body);
   console.log(req.headers);
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
   const signature = req.headers['stripe-signature'];
 
-  let event;
+  let event = JSON.parse(body);
   try {
-    event = stripe.webhooks.constructEvent(
-      req.body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET
-    );
+    // event = stripe.webhooks.constructEvent(
+    //   req.body,
+    //   signature,
+    //   process.env.STRIPE_WEBHOOK_SECRET
+    // );
   } catch (err) {
     console.log(err);
     return res.status(400).send(`Webhook Error: ${err.message}`);
